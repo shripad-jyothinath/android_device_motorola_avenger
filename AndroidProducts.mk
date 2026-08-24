@@ -6,9 +6,13 @@
 
 
 PRODUCT_MAKEFILES := \
-    $(LOCAL_DIR)/lineage_marvel.mk
+    $(LOCAL_DIR)/lineage_marvel.mk \
+    $(LOCAL_DIR)/evolution_marvel.mk
 
 COMMON_LUNCH_CHOICES := \
     lineage_marvel-user \
     lineage_marvel-userdebug \
-    lineage_marvel-eng
+    lineage_marvel-eng \
+    evolution_marvel-user \
+    evolution_marvel-userdebug \
+    evolution_marvel-eng
