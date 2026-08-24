@@ -6,6 +6,6 @@
 
 LOCAL_PATH := $(call my-dir)
 
-ifeq ($(TARGET_DEVICE),avenger)
+ifneq ($(filter $(TARGET_DEVICE),avenger marvel),)
 include $(call all-makefiles-under,$(LOCAL_PATH))
 endif
