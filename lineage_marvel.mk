@@ -1,6 +1,5 @@
 #
 # Copyright (C) 2026 The LineageOS Project
-#
 # SPDX-License-Identifier: Apache-2.0
 #
 
@@ -15,8 +14,8 @@ $(call inherit-product-if-exists, vendor/lineage/config/common_full_phone.mk)
 $(call inherit-product, device/motorola/avenger/device.mk)
 
 # Product metadata
-PRODUCT_NAME := lineage_avenger
-PRODUCT_DEVICE := avenger
+PRODUCT_NAME := lineage_marvel
+PRODUCT_DEVICE := marvel
 PRODUCT_BRAND := motorola
 PRODUCT_MODEL := motorola edge 70 fusion
 PRODUCT_MANUFACTURER := motorola
@@ -24,6 +23,6 @@ PRODUCT_GMS_CLIENTID_BASE := android-motorola
 
 # Build fingerprint and description
 PRODUCT_BUILD_PROP_OVERRIDES += \
-    PRODUCT_NAME=avenger_g \
-    TARGET_DEVICE=avenger \
-    TARGET_PRODUCT=avenger
+    PRODUCT_NAME=marvel_g \
+    TARGET_DEVICE=marvel \
+    TARGET_PRODUCT=marvel
