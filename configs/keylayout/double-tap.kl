@@ -1,0 +1,9 @@
+#
+# Copyright (C) 2026 The LineageOS Project
+# SPDX-License-Identifier: Apache-2.0
+#
+
+# Goodix touchscreen gesture wake mapping
+# Supports both open driver (62) and stock vendor firmware (709)
+key 62    WAKE
+key 709   WAKE
