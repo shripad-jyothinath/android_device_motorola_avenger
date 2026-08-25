@@ -1,9 +1,12 @@
 #
 # Copyright (C) 2026 The LineageOS Project
-#
 # SPDX-License-Identifier: Apache-2.0
 #
 
+# Dedicated Action / Assistant button
+key 217   ASSIST            WAKE
+
+# Standard hardware volume and power keys
 key 114   VOLUME_DOWN
 key 115   VOLUME_UP
 key 116   POWER
