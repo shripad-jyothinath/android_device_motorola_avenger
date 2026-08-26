@@ -1,0 +1,35 @@
+#
+# Copyright (C) 2026 The LineageOS Project
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+
+on early-init
+    # Set display panel refresh rate node permissions
+    chown system system /sys/class/drm/card0-DSI-1/modes
+    chmod 0660 /sys/class/drm/card0-DSI-1/modes
+
+on init
+    # Configure touchscreen gestures
+    chown system system /sys/class/touchscreen/primary/gesture
+    chmod 0660 /sys/class/touchscreen/primary/gesture
+
+on boot
+    # Fingerprint node permissions
+    chown system system /dev/goodix_fp
+    chmod 0666 /dev/goodix_fp
+
+    # Charge control permissions for 68W TurboPower / 7000mAh battery
+    chown system system /sys/class/power_supply/battery/charging_enabled
+    chmod 0664 /sys/class/power_supply/battery/charging_enabled
+
+    # Vibrator / Haptics
+    chown system system /sys/class/leds/vibrator/state
+    chown system system /sys/class/leds/vibrator/duration
+    chown system system /sys/class/leds/vibrator/activate
+
+service vendor.touch_init /vendor/bin/init.mmi.touch.sh
+    class main
+    user root
+    group root system
+    oneshot

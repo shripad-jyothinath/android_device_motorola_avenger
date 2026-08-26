@@ -1,0 +1,14 @@
+#
+# Copyright (C) 2026 The LineageOS Project
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+
+
+PRODUCT_MAKEFILES := \
+    $(LOCAL_DIR)/lineage_marvel.mk
+
+COMMON_LUNCH_CHOICES := \
+    lineage_marvel-user \
+    lineage_marvel-userdebug \
+    lineage_marvel-eng

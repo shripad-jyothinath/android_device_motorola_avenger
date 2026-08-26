@@ -1,0 +1,51 @@
+#
+# Copyright (C) 2026 The LineageOS Project
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+
+# Audio
+vendor/lib64/hw/audio.primary.parrot.so
+vendor/lib64/sound_trigger.primary.parrot.so
+
+# Biometrics (Fingerprint)
+vendor/bin/hw/android.hardware.biometrics.fingerprint-service.goodix
+vendor/lib64/libfp_gf_hal.so
+vendor/lib64/libfp_gf_ca.so
+
+# Camera (Sony Lytia 710 & Ultra-wide)
+vendor/bin/hw/android.hardware.camera.provider@2.7-service-qti
+vendor/lib64/hw/camera.qcom.so
+vendor/lib64/libcamxexternalformatutils.so
+vendor/lib64/libcamxstatscore.so
+vendor/lib64/libcamxstatssa.so
+
+# Connectivity (Bluetooth / Wi-Fi)
+vendor/bin/hw/android.hardware.bluetooth@1.1-service-qti
+vendor/firmware/wlan/qca_cld/WCNSS_qcom_wlan_nv.bin
+vendor/firmware/wlan/qca_cld/wlan_mac.bin
+
+# Display & Graphics (Adreno)
+vendor/lib64/egl/libEGL_adreno.so
+vendor/lib64/egl/libGLESv2_adreno.so
+vendor/lib64/hw/gralloc.parrot.so
+vendor/lib64/hw/hwcomposer.parrot.so
+vendor/lib64/hw/vulkan.adreno.so
+
+# DRM (Widevine)
+vendor/bin/hw/android.hardware.drm@1.4-service.widevine
+vendor/lib64/libwvhidl.so
+vendor/lib64/libwvdrmengine.so
+
+# Radio / Modem / QCRIL
+vendor/bin/hw/rild
+vendor/lib64/libril-qc-hal-qmi.so
+vendor/lib64/libqmiservices.so
+
+# Sensors
+vendor/bin/hw/android.hardware.sensors@2.1-service.multihal
+vendor/lib64/sensors.ssc.so
+
+# Thermal
+vendor/bin/thermal-engine
+vendor/lib64/libthermalclient.so

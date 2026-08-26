@@ -1,0 +1,92 @@
+<!--
+     Copyright (C) 2026 The LineageOS Project
+     SPDX-License-Identifier: Apache-2.0
+-->
+<manifest version="1.0" type="device" target-level="7">
+    <!-- Biometrics Fingerprint AIDL -->
+    <hal format="aidl">
+        <name>android.hardware.biometrics.fingerprint</name>
+        <version>3</version>
+        <interface>
+            <name>IFingerprint</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+
+    <!-- Camera Provider AIDL / HIDL -->
+    <hal format="aidl">
+        <name>android.hardware.camera.provider</name>
+        <version>1</version>
+        <interface>
+            <name>ICameraProvider</name>
+            <instance>internal/0</instance>
+        </interface>
+    </hal>
+
+    <!-- Audio AIDL -->
+    <hal format="aidl">
+        <name>android.hardware.audio.core</name>
+        <version>1</version>
+        <interface>
+            <name>IModule</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+
+    <!-- DRM Widevine -->
+    <hal format="hidl">
+        <name>android.hardware.drm</name>
+        <transport>hwbinder</transport>
+        <version>1.4</version>
+        <interface>
+            <name>ICryptoFactory</name>
+            <instance>default</instance>
+            <instance>widevine</instance>
+        </interface>
+        <interface>
+            <name>IDrmFactory</name>
+            <instance>default</instance>
+            <instance>widevine</instance>
+        </interface>
+    </hal>
+
+    <!-- Graphics Composer (HWC) -->
+    <hal format="aidl">
+        <name>android.hardware.graphics.composer</name>
+        <version>1</version>
+        <interface>
+            <name>IComposer</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+
+    <!-- Sensors -->
+    <hal format="aidl">
+        <name>android.hardware.sensors</name>
+        <version>1</version>
+        <interface>
+            <name>ISensors</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+
+    <!-- Vibrator AIDL -->
+    <hal format="aidl">
+        <name>android.hardware.vibrator</name>
+        <version>2</version>
+        <interface>
+            <name>IVibrator</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+
+    <!-- Wi-Fi AIDL -->
+    <hal format="aidl">
+        <name>android.hardware.wifi</name>
+        <version>1</version>
+        <interface>
+            <name>IWifi</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+</manifest>
