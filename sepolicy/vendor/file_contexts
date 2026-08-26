@@ -1,0 +1,11 @@
+# SELinux file contexts for Motorola Edge 70 Fusion (avenger)
+
+# Touch init script
+/vendor/bin/init\.mmi\.touch\.sh                  u:object_r:vendor_touch_init_exec:s0
+
+# Fingerprint device nodes
+/dev/goodix_fp                                   u:object_r:vendor_fingerprint_data_file:s0
+
+# Motorola sensors and sysfs
+/sys/class/touchscreen/primary(/.*)?              u:object_r:sysfs_touchpanel:s0
+/sys/class/drm/card0-DSI-1/modes                 u:object_r:sysfs_graphics:s0
