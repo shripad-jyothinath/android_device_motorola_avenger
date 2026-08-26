@@ -5,9 +5,13 @@
 #
 
 PRODUCT_MAKEFILES := \
-    $(LOCAL_DIR)/lineage_avenger.mk
+    $(LOCAL_DIR)/lineage_avenger.mk \
+    $(LOCAL_DIR)/evolution_avenger.mk
 
 COMMON_LUNCH_CHOICES := \
     lineage_avenger-user \
     lineage_avenger-userdebug \
-    lineage_avenger-eng
+    lineage_avenger-eng \
+    evolution_avenger-user \
+    evolution_avenger-userdebug \
+    evolution_avenger-eng
