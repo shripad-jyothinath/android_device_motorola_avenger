@@ -33,8 +33,7 @@ PRODUCT_PACKAGES += \
     moto-res \
     RefreshRateDefaults \
     AvengerFrameworksOverlay \
-    AvengerSystemUIOverlay \
-    roadstr-udfps-hbm
+    AvengerSystemUIOverlay
 
 # Permissions & Hardware Features
 PRODUCT_COPY_FILES += \

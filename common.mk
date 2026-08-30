@@ -28,7 +28,6 @@ AB_OTA_POSTINSTALL_CONFIG += \
     POSTINSTALL_OPTIONAL_vendor=true
 
 PRODUCT_PACKAGES += \
-    RoadstrCarrierConfigOverlay \
     checkpoint_gc \
     otapreopt_script
 
@@ -52,7 +51,7 @@ PRODUCT_COPY_FILES += \
 
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/init/init.qcom.recovery.rc:$(TARGET_COPY_OUT_RECOVERY)/root/init.recovery.qcom.rc \
-    $(LOCAL_PATH)/recovery/roadstr_touch_probe.sh:$(TARGET_COPY_OUT_RECOVERY)/root/system/bin/roadstr_touch_probe
+    $(LOCAL_PATH)/recovery/touch_probe.sh:$(TARGET_COPY_OUT_RECOVERY)/root/system/bin/touch_probe
 
 # Audio
 PRODUCT_PACKAGES += \
