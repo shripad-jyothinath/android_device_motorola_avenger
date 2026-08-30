@@ -446,11 +446,11 @@ PRODUCT_COPY_FILES += \
 
 # VINTF
 DEVICE_FRAMEWORK_COMPATIBILITY_MATRIX_FILE := \
-    device/motorola/sm7750-common/vintf/vendor_framework_compatibility_matrix.xml \
+    $(LOCAL_PATH)/vintf/vendor_framework_compatibility_matrix.xml \
     hardware/motorola/vintf/device_framework_matrix.xml \
     hardware/qcom-caf/common/vendor_framework_compatibility_matrix.xml
 DEVICE_MANIFEST_FILE := \
-    device/motorola/sm7750-common/vintf/manifest.xml
+    $(LOCAL_PATH)/vintf/manifest.xml
 DEVICE_MATRIX_FILE := hardware/qcom-caf/common/compatibility_matrix.xml
 
 # WiFi
@@ -487,4 +487,4 @@ PRODUCT_VENDOR_PROPERTIES += \
     dalvik.vm.heapmaxfree=32m
 
 # Inherit from vendor blobs
-$(call inherit-product, vendor/motorola/sm7750-common/sm7750-common-vendor.mk)
+$(call inherit-product-if-exists, vendor/motorola/avenger/avenger-vendor.mk)
