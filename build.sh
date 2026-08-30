@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 #
-# Evolution X Build Script for Motorola Edge 70 Fusion (avenger)
+# Evolution X Build Script for Motorola Edge 70 Fusion (marvel / avenger)
 # Maintainer: Shripad
 #
 
 set -e
 
-DEVICE="avenger"
+DEVICE="marvel"
 
 echo "========================================================"
 echo "  Building Evolution X for Moto Edge 70 Fusion (${DEVICE})"
@@ -41,7 +41,7 @@ fi
 START_TIME=$(date +%s)
 
 echo "[+] Setting lunch target..."
-lunch "evolution_${DEVICE}-userdebug"
+lunch "evolution_${DEVICE}-userdebug" || lunch "evolution_avenger-userdebug"
 
 echo "[+] Starting Evolution X compilation..."
 m evolution -j$(nproc --all)

@@ -75,12 +75,11 @@ jobs:
         source build/envsetup.sh
         export ALLOW_MISSING_DEPENDENCIES=true
         export FOX_USE_TWRP_RECOVERY_IMAGE_BUILDER=1
-        lunch orangefox_avenger-eng || lunch omni_avenger-eng || lunch lineage_avenger-eng
+        lunch orangefox_marvel-eng || lunch orangefox_avenger-eng || lunch omni_marvel-eng || lunch lineage_marvel-eng
         make clean
         make recoveryimage -j$(nproc --all)
-        cd out/target/product/avenger
-        find . -maxdepth 1 -name "OrangeFox*.zip" -o -name "recovery.img" -exec cp {} ~/ \;
-        echo "Done building OrangeFox recovery for avenger"
+        find out/target/product/ -maxdepth 2 -name "OrangeFox*.zip" -o -name "recovery.img" -exec cp {} ~/ \;
+        echo "Done building OrangeFox recovery"
 
     - name: Set Properties
       run: |
