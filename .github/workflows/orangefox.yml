@@ -60,16 +60,13 @@ jobs:
         cd fox
         repo sync -j$(nproc --all) --force-sync
 
-    - name: Clone Device & Dependencies
+    - name: Clone Device Tree
       run: |
         cd fox
-        mkdir -p device/motorola vendor/motorola hardware/motorola hardware/qcom-caf
-        git clone https://github.com/${{ github.repository }}.git -b master ./device/motorola/avenger || git clone https://github.com/${{ github.repository }}.git ./device/motorola/avenger
-        git clone https://github.com/soytony/android_device_motorola_sm7750-common.git ./device/motorola/sm7750-common
-        git clone https://github.com/soytony/proprietary_vendor_motorola_sm7750-common.git ./vendor/motorola/sm7750-common
-        git clone https://github.com/LineageOS/android_hardware_motorola.git ./hardware/motorola
-        git clone https://github.com/LineageOS/android_hardware_qcom-caf_common.git ./hardware/qcom-caf/common
-        git clone https://github.com/LineageOS/android_hardware_qcom-caf_bootctrl.git ./hardware/qcom-caf/bootctrl
+        mkdir -p device/motorola hardware/motorola hardware/qcom-caf
+        git clone https://github.com/${{ github.repository }}.git -b master ./device/motorola/avenger
+        [ -d ./hardware/motorola ] || git clone https://github.com/LineageOS/android_hardware_motorola.git ./hardware/motorola
+        [ -d ./hardware/qcom-caf/common ] || git clone https://github.com/LineageOS/android_hardware_qcom-caf_common.git ./hardware/qcom-caf/common
         cd device/motorola/avenger
         echo "COMMIT_ID=$(git rev-parse HEAD)" >> $GITHUB_ENV
 
@@ -92,7 +89,7 @@ jobs:
         echo -e \
         "
         ## OrangeFox Recovery R12.1 for Motorola Edge 70 Fusion (avenger)
-        * Built with GKI 6.6 prebuilts from sm7750-common
+        * Built with Standalone Device Tree
         * Status: Unofficial Test Build
         * Maintainer: Shripad
         " > changelog.txt
