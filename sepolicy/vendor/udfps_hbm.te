@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
-type udfps_hbm_service, service_manager_type;
+type udfps_hbm_service, vendor_service, protected_service, service_manager_type;
 
 add_service(hal_fingerprint_default, udfps_hbm_service)
 binder_call(system_app, hal_fingerprint_default)
