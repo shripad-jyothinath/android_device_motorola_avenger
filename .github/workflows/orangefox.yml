@@ -1,0 +1,106 @@
+name: Build OrangeFox Recovery
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - master
+      - main
+    paths:
+      - 'orangefox_avenger.mk'
+      - 'BoardConfig.mk'
+
+jobs:
+  build:
+    name: Build OrangeFox by ${{ github.actor }}
+    runs-on: ubuntu-22.04
+    permissions:
+      contents: write
+    steps:
+    - name: Check Out
+      uses: actions/checkout@v3
+
+    - name: Cleanup
+      uses: rokibhasansagar/slimhub_actions@main
+
+    - name: Set Swap Space
+      uses: pierotofy/set-swap-space@master
+      with:
+        swap-size-gb: 12
+
+    - name: Prepare Build Environment
+      run: |
+        sudo apt-get update
+        sudo apt-get -y upgrade
+        sudo apt-get -y install gperf gcc-multilib g++-multilib libc6-dev lib32ncurses5-dev x11proto-core-dev libx11-dev tree lib32z-dev libgl1-mesa-dev libxml2-utils xsltproc bc ccache lib32readline-dev lib32z1-dev liblz4-tool libncurses5 libtinfo5 libsdl1.2-dev libxml2 lzop pngcrush schedtool squashfs-tools imagemagick libbz2-dev lzma ncftp qemu-user-static python-is-python3 python3 git curl zip
+
+    - name: Install OpenJDK
+      uses: actions/setup-java@v3
+      with:
+        distribution: 'zulu'
+        java-version: '8'
+
+    - name: Install Git-Repo
+      run: |
+        mkdir -p ~/bin
+        curl https://storage.googleapis.com/git-repo-downloads/repo > ~/bin/repo
+        chmod a+x ~/bin/repo
+        sudo ln -sf ~/bin/repo /usr/bin/repo
+
+    - name: Initialize OrangeFox Repo
+      run: |
+        mkdir -p fox
+        cd fox
+        git config --global user.name "${{ github.actor }}"
+        git config --global user.email "${{ github.actor }}@users.noreply.github.com"
+        repo init --depth=1 -u https://gitlab.com/OrangeFox/manifest.git -b fox_12.1
+
+    - name: Sync Source
+      run: |
+        cd fox
+        repo sync -j$(nproc --all) --force-sync
+
+    - name: Clone Device & Vendor Trees
+      run: |
+        cd fox
+        mkdir -p device/motorola vendor/motorola hardware/motorola
+        git clone https://github.com/${{ github.repository }}.git -b master ./device/motorola/avenger || git clone https://github.com/${{ github.repository }}.git ./device/motorola/avenger
+        git clone https://github.com/soytony/android_device_motorola_sm7750-common.git ./device/motorola/sm7750-common
+        git clone https://github.com/soytony/proprietary_vendor_motorola_sm7750-common.git ./vendor/motorola/sm7750-common
+        git clone https://github.com/LineageOS/android_hardware_motorola.git ./hardware/motorola
+        cd device/motorola/avenger
+        echo "COMMIT_ID=$(git rev-parse HEAD)" >> $GITHUB_ENV
+
+    - name: Build OrangeFox Recovery
+      run: |
+        cd fox
+        source build/envsetup.sh
+        export ALLOW_MISSING_DEPENDENCIES=true
+        export FOX_USE_TWRP_RECOVERY_IMAGE_BUILDER=1
+        lunch orangefox_avenger-eng || lunch omni_avenger-eng || lunch lineage_avenger-eng
+        make clean
+        make recoveryimage -j$(nproc --all)
+        cd out/target/product/avenger
+        find . -maxdepth 1 -name "OrangeFox*.zip" -o -name "recovery.img" -exec cp {} ~/ \;
+        echo "Done building OrangeFox recovery for avenger"
+
+    - name: Set Properties
+      run: |
+        echo "BUILD_DATE=$(date +%Y%m%d)" >> $GITHUB_ENV
+        echo -e \
+        "
+        ## OrangeFox Recovery R12.1 for Motorola Edge 70 Fusion (avenger)
+        * Built with GKI 6.6 prebuilts from sm7750-common
+        * Status: Unofficial Test Build
+        * Maintainer: Shripad
+        " > changelog.txt
+
+    - name: Upload to GitHub Release
+      uses: softprops/action-gh-release@v1
+      with:
+        files: |
+          ~/OrangeFox*.zip
+          ~/recovery.img
+        name: OrangeFox Recovery R12.1 for Moto Edge 70 Fusion (${{ env.BUILD_DATE }})
+        tag_name: ofox-${{ github.run_id }}
+        body_path: changelog.txt
