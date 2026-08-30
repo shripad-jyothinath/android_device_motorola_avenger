@@ -9,7 +9,7 @@ $(call inherit-product, $(SRC_TARGET_DIR)/product/core_64_bit.mk)
 $(call inherit-product, $(SRC_TARGET_DIR)/product/full_base_telephony.mk)
 
 # Inherit from LineageOS product configuration
-$(call inherit-product, vendor/lineage/config/common_full_phone.mk)
+$(call inherit-product-if-exists, vendor/lineage/config/common_full_phone.mk)
 
 # Inherit from device configuration
 $(call inherit-product, device/motorola/avenger/device.mk)
