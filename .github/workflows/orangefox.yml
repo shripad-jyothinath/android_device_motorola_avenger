@@ -60,14 +60,16 @@ jobs:
         cd fox
         repo sync -j$(nproc --all) --force-sync
 
-    - name: Clone Device & Vendor Trees
+    - name: Clone Device & Dependencies
       run: |
         cd fox
-        mkdir -p device/motorola vendor/motorola hardware/motorola
+        mkdir -p device/motorola vendor/motorola hardware/motorola hardware/qcom-caf
         git clone https://github.com/${{ github.repository }}.git -b master ./device/motorola/avenger || git clone https://github.com/${{ github.repository }}.git ./device/motorola/avenger
         git clone https://github.com/soytony/android_device_motorola_sm7750-common.git ./device/motorola/sm7750-common
         git clone https://github.com/soytony/proprietary_vendor_motorola_sm7750-common.git ./vendor/motorola/sm7750-common
         git clone https://github.com/LineageOS/android_hardware_motorola.git ./hardware/motorola
+        git clone https://github.com/LineageOS/android_hardware_qcom-caf_common.git ./hardware/qcom-caf/common
+        git clone https://github.com/LineageOS/android_hardware_qcom-caf_bootctrl.git ./hardware/qcom-caf/bootctrl
         cd device/motorola/avenger
         echo "COMMIT_ID=$(git rev-parse HEAD)" >> $GITHUB_ENV
 
@@ -101,6 +103,6 @@ jobs:
         files: |
           ~/OrangeFox*.zip
           ~/recovery.img
-        name: OrangeFox Recovery R12.1 for Moto Edge 70 Fusion (${{ env.BUILD_DATE }}
+        name: OrangeFox Recovery R12.1 for Moto Edge 70 Fusion (${{ env.BUILD_DATE }})
         tag_name: ofox-${{ github.run_id }}
         body_path: changelog.txt
