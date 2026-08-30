@@ -7,10 +7,7 @@
 soong_namespace {
     imports: [
         "device/motorola/avenger",
-        "device/motorola/sm7750-common",
         "vendor/motorola/avenger",
-        "vendor/motorola/sm7750-common",
         "hardware/motorola",
-        "hardware/qcom-caf/bootctrl",
     ],
 }
