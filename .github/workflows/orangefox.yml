@@ -4,8 +4,7 @@ on:
   workflow_dispatch:
   push:
     branches:
-      - master
-      - main
+      - 'android-16'
     paths:
       - 'orangefox_avenger.mk'
       - 'BoardConfig.mk'
@@ -64,7 +63,7 @@ jobs:
       run: |
         cd fox
         mkdir -p device/motorola hardware/motorola hardware/qcom-caf
-        git clone https://github.com/${{ github.repository }}.git -b master ./device/motorola/avenger
+        git clone https://github.com/${{ github.repository }}.git -b android-16 ./device/motorola/avenger
         [ -d ./hardware/motorola ] || git clone https://github.com/LineageOS/android_hardware_motorola.git ./hardware/motorola
         [ -d ./hardware/qcom-caf/common ] || git clone https://github.com/LineageOS/android_hardware_qcom-caf_common.git ./hardware/qcom-caf/common
         cd device/motorola/avenger
