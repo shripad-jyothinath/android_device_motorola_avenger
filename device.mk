@@ -14,7 +14,7 @@ PRODUCT_AAPT_CONFIG := normal
 PRODUCT_AAPT_PREF_CONFIG := 440dpi
 PRODUCT_AAPT_PREBUILT_DPI := xxxhdpi xxhdpi xhdpi hdpi
 
-PRODUCT_SHIPPING_API_LEVEL := 36
+PRODUCT_SHIPPING_API_LEVEL ?= 36
 PRODUCT_CHARACTERISTICS := nosdcard
 
 # Inherit device common definitions
