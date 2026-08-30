@@ -6,5 +6,6 @@
 # Data & Sysfs types
 type vendor_camera_data_file, file_type, data_file_type;
 type vendor_fingerprint_data_file, file_type, data_file_type;
+type vendor_persistence_file, file_type, data_file_type;
 type sysfs_graphics, sysfs_type, fs_type;
 type sysfs_touchpanel, sysfs_type, fs_type;
