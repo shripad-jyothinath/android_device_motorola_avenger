@@ -6,8 +6,6 @@
 
 soong_namespace {
     imports: [
-        "device/motorola/avenger",
-        "vendor/motorola/avenger",
         "hardware/motorola",
     ],
 }
