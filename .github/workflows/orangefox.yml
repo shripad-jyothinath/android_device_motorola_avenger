@@ -64,8 +64,8 @@ jobs:
         cd fox
         mkdir -p device/motorola hardware/motorola hardware/qcom-caf
         git clone https://github.com/${{ github.repository }}.git -b android-16 ./device/motorola/avenger
-        [ -d ./hardware/motorola ] || git clone https://github.com/LineageOS/android_hardware_motorola.git ./hardware/motorola
-        [ -d ./hardware/qcom-caf/common ] || git clone https://github.com/LineageOS/android_hardware_qcom-caf_common.git ./hardware/qcom-caf/common
+        [ -d ./hardware/motorola ] || git clone https://github.com/LineageOS/android_hardware_motorola.git -b lineage-19.1 ./hardware/motorola
+        [ -d ./hardware/qcom-caf/common ] || git clone https://github.com/LineageOS/android_hardware_qcom-caf_common.git -b lineage-19.1 ./hardware/qcom-caf/common
         cd device/motorola/avenger
         echo "COMMIT_ID=$(git rev-parse HEAD)" >> $GITHUB_ENV
 
