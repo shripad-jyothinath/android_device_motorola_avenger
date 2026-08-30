@@ -47,13 +47,13 @@ jobs:
         chmod a+x ~/bin/repo
         sudo ln -sf ~/bin/repo /usr/bin/repo
 
-    - name: Initialize OrangeFox Repo
+    - name: Initialize Recovery Manifest
       run: |
         mkdir -p fox
         cd fox
         git config --global user.name "${{ github.actor }}"
         git config --global user.email "${{ github.actor }}@users.noreply.github.com"
-        repo init --depth=1 -u https://gitlab.com/OrangeFox/manifest.git -b fox_12.1
+        repo init --depth=1 -u https://gitlab.com/OrangeFox/sync.git -b 12.1 || repo init --depth=1 -u https://github.com/minimal-manifest-twrp/platform_manifest_twrp_aosp.git -b twrp-12.1
 
     - name: Sync Source
       run: |
@@ -101,6 +101,6 @@ jobs:
         files: |
           ~/OrangeFox*.zip
           ~/recovery.img
-        name: OrangeFox Recovery R12.1 for Moto Edge 70 Fusion (${{ env.BUILD_DATE }})
+        name: OrangeFox Recovery R12.1 for Moto Edge 70 Fusion (${{ env.BUILD_DATE }}
         tag_name: ofox-${{ github.run_id }}
         body_path: changelog.txt
