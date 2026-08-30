@@ -1,6 +1,5 @@
 #
 # Copyright (C) 2026 The LineageOS Project
-#
 # SPDX-License-Identifier: Apache-2.0
 #
 
@@ -18,8 +17,8 @@ PRODUCT_AAPT_PREBUILT_DPI := xxxhdpi xxhdpi xhdpi hdpi
 PRODUCT_SHIPPING_API_LEVEL := 36
 PRODUCT_CHARACTERISTICS := nosdcard
 
-# Inherit from sm7750-common
-$(call inherit-product, device/motorola/sm7750-common/common.mk)
+# Inherit device common definitions
+$(call inherit-product, $(DEVICE_PATH)/common.mk)
 
 # Touchscreen double-tap wake & gestures
 $(call soong_config_set_bool,moto_sensors,legacy_double_tap,true)
