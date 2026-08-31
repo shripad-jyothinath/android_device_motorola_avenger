@@ -1,0 +1,27 @@
+#
+# Copyright (C) 2026 The OrangeFox Recovery Project
+# SPDX-License-Identifier: Apache-2.0
+#
+
+on early-init
+    mkdir /firmware 0771 system system
+    mkdir /vendor/firmware_mnt 0771 system system
+    mount vfat /dev/block/bootdevice/by-name/modem /vendor/firmware_mnt ro,shortname=lower,uid=1000,gid=1000,dmask=227,fmask=337
+    symlink /vendor/firmware_mnt /firmware
+
+on init
+    write /sys/class/backlight/panel0-backlight/brightness 1200
+    setprop sys.usb.configfs 1
+
+on post-fs
+    start touch_probe
+
+on boot
+    setprop sys.usb.config adb
+
+service touch_probe /system/bin/touch_probe.sh
+    user root
+    group root
+    disabled
+    oneshot
+    seclabel u:r:recovery:s0
