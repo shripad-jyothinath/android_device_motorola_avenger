@@ -1,0 +1,17 @@
+[
+  {
+    "repository": "android_kernel_motorola_sm7750",
+    "target_path": "kernel/motorola/sm7750",
+    "branch": "android-16"
+  },
+  {
+    "repository": "android_vendor_motorola_avenger",
+    "target_path": "vendor/motorola/avenger",
+    "branch": "android-16"
+  },
+  {
+    "repository": "android_hardware_motorola",
+    "target_path": "hardware/motorola",
+    "branch": "lineage-22.0"
+  }
+]
