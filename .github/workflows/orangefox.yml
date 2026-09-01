@@ -1,0 +1,160 @@
+name: Build OrangeFox Recovery
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - 'ofrp'
+
+jobs:
+  build:
+    name: Build OrangeFox by ${{ github.actor }}
+    runs-on: ubuntu-22.04
+    permissions:
+      contents: write
+    steps:
+    - name: Check Out
+      uses: actions/checkout@v4
+
+    - name: Set Swap Space
+      uses: pierotofy/set-swap-space@master
+      with:
+        swap-size-gb: 12
+
+    - name: Prepare Build Environment
+      run: |
+        sudo apt update
+        sudo apt install -y ccache git-core gnupg flex bison build-essential zip curl zlib1g-dev \
+          libc6-dev-i386 libncurses5 x11proto-core-dev libx11-dev lib32z1-dev libgl1-mesa-dev \
+          libxml2 libxml2-utils xsltproc unzip fontconfig libssl-dev bc rsync python3
+
+    - name: Setup Ccache
+      uses: actions/cache@v4
+      with:
+        path: ~/.ccache
+        key: ${{ runner.os }}-ccache-${{ github.sha }}
+        restore-keys: |
+          ${{ runner.os }}-ccache-
+
+    - name: Install OpenJDK
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'zulu'
+        java-version: '8'
+
+    - name: Install Git-Repo
+      run: |
+        mkdir -p ~/bin
+        curl https://storage.googleapis.com/git-repo-downloads/repo > ~/bin/repo
+        chmod a+x ~/bin/repo
+        sudo ln -sf ~/bin/repo /usr/bin/repo
+
+    - name: Initialize Recovery Manifest
+      run: |
+        mkdir -p fox && cd fox
+        git config --global user.name "shripad-jyothinath"
+        git config --global user.email "shripad-jyothinath@users.noreply.github.com"
+        repo init --depth=1 -u https://gitlab.com/OrangeFox/sync.git -b 12.1 --no-repo-verify || repo init --depth=1 -u https://github.com/minimal-manifest-twrp/platform_manifest_twrp_aosp.git -b twrp-12.1
+        echo "Manifest initialized"
+
+    - name: Sync Source
+      run: |
+        cd fox
+        repo sync -c -j$(nproc --all) --force-sync --no-clone-bundle --no-tags
+        echo "Source sync complete"
+
+    - name: Clone Device Tree
+      run: |
+        cd fox
+        mkdir -p device/motorola hardware/motorola hardware/qcom-caf
+        git clone https://github.com/${{ github.repository }}.git -b ofrp ./device/motorola/avenger
+        ln -sf avenger ./device/motorola/marvel
+        [ -d ./hardware/motorola ] || git clone https://github.com/LineageOS/android_hardware_motorola.git -b lineage-19.1 ./hardware/motorola
+        [ -d ./hardware/qcom-caf/common ] || git clone https://github.com/LineageOS/android_hardware_qcom-caf_common.git -b lineage-19.1 ./hardware/qcom-caf/common
+        cd device/motorola/avenger
+        echo "COMMIT_ID=$(git rev-parse HEAD)" >> $GITHUB_ENV
+
+    - name: Build OrangeFox Recovery
+      run: |
+        cd fox
+        export USE_CCACHE=1
+        export CCACHE_DIR=~/.ccache
+        ccache -M 10G
+        source build/envsetup.sh
+        export ALLOW_MISSING_DEPENDENCIES=true
+        export FOX_USE_TWRP_RECOVERY_IMAGE_BUILDER=1
+        lunch orangefox_marvel-eng || lunch orangefox_avenger-eng || lunch omni_marvel-eng || lunch lineage_marvel-eng
+
+        MAX_RETRIES=10
+        RETRY_COUNT=0
+        BUILD_SUCCESS=0
+
+        while [ $RETRY_COUNT -lt $MAX_RETRIES ]; do
+          echo "========================================================"
+          echo "Starting OrangeFox build attempt #$((RETRY_COUNT + 1))..."
+          echo "========================================================"
+          
+          if make recoveryimage -j$(nproc --all); then
+            BUILD_SUCCESS=1
+            echo "Build finished successfully!"
+            break
+          fi
+
+          RETRY_COUNT=$((RETRY_COUNT + 1))
+          echo "Build failed. Waiting for hotfix commits on branch ofrp (checking every 30s)..."
+
+          HOTFIX_FOUND=0
+          for i in $(seq 1 15); do
+            sleep 30
+            cd device/motorola/avenger
+            git fetch origin ofrp --quiet 2>/dev/null || true
+            LOCAL_HASH=$(git rev-parse HEAD)
+            REMOTE_HASH=$(git rev-parse origin/ofrp 2>/dev/null || echo "$LOCAL_HASH")
+            if [ "$LOCAL_HASH" != "$REMOTE_HASH" ]; then
+              echo ">>> Hotfix detected! Updating from $LOCAL_HASH to $REMOTE_HASH <<<"
+              git reset --hard origin/ofrp
+              cd ../../..
+              HOTFIX_FOUND=1
+              break
+            fi
+            cd ../../..
+          done
+
+          if [ $HOTFIX_FOUND -eq 0 ]; then
+            echo "No new hotfix commit detected after timeout. Exiting."
+            break
+          fi
+        done
+
+        if [ $BUILD_SUCCESS -eq 0 ]; then
+          echo "Build failed."
+          exit 1
+        fi
+
+        find out/target/product/ -name "recovery.img" -o -name "OrangeFox*.zip" -o -name "*.img" -exec cp {} $GITHUB_WORKSPACE/ \; 2>/dev/null || true
+        ls -lh $GITHUB_WORKSPACE/*.img $GITHUB_WORKSPACE/*.zip 2>/dev/null || true
+        echo "Done building OrangeFox recovery"
+
+    - name: Set Properties
+      run: |
+        echo "BUILD_DATE=$(date +%Y%m%d)" >> $GITHUB_ENV
+        echo -e \
+        "
+        ## OrangeFox Recovery R12.1 for Motorola Edge 70 Fusion (marvel / avenger)
+        * Built with Standalone Device Tree
+        * Status: Unofficial Test Build
+        * Maintainer: Shripad
+        " > changelog.txt
+
+    - name: Upload to GitHub Release
+      uses: softprops/action-gh-release@v1
+      with:
+        files: |
+          *.zip
+          *.img
+          fox/out/target/product/*/*.zip
+          fox/out/target/product/*/*.img
+        name: OrangeFox Recovery R12.1 for Moto Edge 70 Fusion (${{ env.BUILD_DATE }})
+        tag_name: ofox-${{ github.run_id }}
+        body_path: changelog.txt
+
