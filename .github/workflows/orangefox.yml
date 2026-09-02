@@ -131,9 +131,19 @@ jobs:
           exit 1
         fi
 
-        find out/target/product/ -name "recovery.img" -o -name "OrangeFox*.zip" -o -name "*.img" -exec cp {} $GITHUB_WORKSPACE/ \; 2>/dev/null || true
-        ls -lh $GITHUB_WORKSPACE/*.img $GITHUB_WORKSPACE/*.zip 2>/dev/null || true
-        echo "Done building OrangeFox recovery"
+        mkdir -p $GITHUB_WORKSPACE/release_assets
+        find out/target/product/ -name "recovery.img" -exec cp {} $GITHUB_WORKSPACE/release_assets/recovery.img \; 2>/dev/null || true
+        
+        # Package Flashable OrangeFox ZIP
+        if [ -f $GITHUB_WORKSPACE/release_assets/recovery.img ]; then
+          echo "Packaging OrangeFox flashable ZIP..."
+          cd $GITHUB_WORKSPACE/release_assets
+          zip -9 OrangeFox-R12.1-Unofficial-marvel.zip recovery.img
+          cd $GITHUB_WORKSPACE/fox
+        fi
+        
+        ls -lh $GITHUB_WORKSPACE/release_assets/
+        echo "Done building and packaging OrangeFox recovery"
 
     - name: Set Properties
       run: |
@@ -144,16 +154,18 @@ jobs:
         * Built with Standalone Device Tree
         * Status: Unofficial Test Build
         * Maintainer: Shripad
+
+        ### Flashing Guide
+        * **Fastboot:** \`fastboot flash recovery recovery.img\`
+        * **Recovery Flashable:** Flash \`OrangeFox-R12.1-Unofficial-marvel.zip\` in existing recovery.
         " > changelog.txt
 
     - name: Upload to GitHub Release
       uses: softprops/action-gh-release@v1
       with:
         files: |
-          *.zip
-          *.img
-          fox/out/target/product/*/*.zip
-          fox/out/target/product/*/*.img
+          release_assets/recovery.img
+          release_assets/OrangeFox-*.zip
         name: OrangeFox Recovery R12.1 for Moto Edge 70 Fusion (${{ env.BUILD_DATE }})
         tag_name: ofox-${{ github.run_id }}
         body_path: changelog.txt
