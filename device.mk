@@ -58,5 +58,13 @@ PRODUCT_VENDOR_PROPERTIES += \
     ro.surface_flinger.set_idle_timer_ms=1100 \
     ro.surface_flinger.set_touch_timer_ms=1000
 
+# Motorola Camera Extensions & Multi-Lens Whitelist
+PRODUCT_PRODUCT_PROPERTIES += \
+    vendor.camera.aux.packagelist=com.motorola.camera5,com.motorola.camera4,com.motorola.cameraone,com.motorola.camera2 \
+    persist.vendor.camera.privapp.list=com.motorola.camera5,com.motorola.camera4
+
+PRODUCT_PACKAGES += \
+    com.motorola.camera.extensions
+
 # Inherit proprietary blobs from vendor tree
 $(call inherit-product-if-exists, vendor/motorola/marvel/marvel-vendor.mk)
