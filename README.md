@@ -12,9 +12,9 @@ This repository contains the **OrangeFox Recovery Project (R12.1)** device tree 
 
 | Feature | Specification |
 | :--- | :--- |
-| **SoC** | Qualcomm Snapdragon 7s Gen 3 (`SM7750` / `sm7635`) |
-| **CPU** | Octa-core Kryo architecture |
-| **GPU** | Qualcomm Adreno GPU |
+| **SoC** | Qualcomm Snapdragon 7s Gen 4 (`SM7635-AC` / `SM7750`, `volcano`) |
+| **CPU** | Octa-core Kryo architecture (1x 2.7GHz + 3x 2.4GHz + 4x 1.8GHz) |
+| **GPU** | Qualcomm Adreno 810 GPU |
 | **Display** | 6.78-inch 1.5K OLED, 144Hz, Quad-Curved |
 | **Battery** | 7,000 mAh Silicon-Carbon, 68W TurboPower |
 | **Storage / RAM** | 8GB/12GB LPDDR5X + 128GB/256GB/512GB UFS |
