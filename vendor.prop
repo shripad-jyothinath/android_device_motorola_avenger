@@ -1,8 +1,8 @@
-# Platform-common vendor properties for SM7750 (sun)
+# Platform-common vendor properties for SM7635 (volcano)
 
 # Audio
-ro.vendor.audio_sdk.sku=sun
-ro.vendor.audio_hal.sku=sun
+ro.vendor.audio_sdk.sku=volcano
+ro.vendor.audio_hal.sku=volcano
 
 # Bluetooth
 persist.vendor.btstack.enable.splita2dp=true
@@ -13,7 +13,6 @@ ro.vendor.bluetooth.library_name=libbluetooth_qti.so
 ro.vendor.camera.cf.flashlight=1
 
 # Chipset
-ro.board.platform=sun
 ro.vendor.qti.ambs.register.audio_listener=true
 
 # CRIU
@@ -84,7 +83,6 @@ ro.vendor.gatekeeper.algorithm=gatekeeper
 # Graphics
 ro.hardware.egl=adreno
 ro.hardware.vulkan=adreno
-ro.gfx.driver.1=com.qualcomm.qti.gpudrivers.sun.api35
 ro.opengles.version=196610
 
 # Keymaster
@@ -93,7 +91,7 @@ vendor.keymint.retry_timer=5
 ro.hardware.keystore_desede=true
 
 # Media
-ro.media.xmlvariant.codecs=sun
+ro.media.xmlvariant.codecs=volcano
 
 # NFC
 ro.vendor.nfc.fwdump.dmgz=0
