@@ -1,10 +1,10 @@
-# Unified Device Tree for Motorola Edge 70 Fusion (`marvel`)
+# OrangeFox Recovery Project Device Tree for Motorola Edge 70 Fusion (`marvel`)
 
 <p align="center">
   <img src="assets/device.jpg" alt="Motorola Edge 70 Fusion" width="360"/>
 </p>
 
-This repository provides the unified AOSP / LineageOS / Evolution X device tree configuration for the **Motorola Edge 70 Fusion** (Codename: `marvel`, Model: `XT2605` series).
+This repository contains the **OrangeFox Recovery Project (R12.1)** device tree for the **Motorola Edge 70 Fusion** (Codename: `marvel`, Model: `XT2605` series).
 
 ---
 
@@ -12,51 +12,51 @@ This repository provides the unified AOSP / LineageOS / Evolution X device tree 
 
 | Feature | Specification |
 | :--- | :--- |
-| **SoC** | Qualcomm Snapdragon 7s Gen 3 / Gen 4 (`SM7750` / `sm7635`) |
-| **CPU** | Octa-core Kryo architecture |
-| **GPU** | Qualcomm Adreno GPU |
-| **Display** | 6.78-inch 1.5K Extreme AMOLED, 144Hz, Quad-Curved |
+| **SoC** | Qualcomm Snapdragon 7s Gen 4 (`SM7635-AC` / `SM7750`, `volcano`) |
+| **CPU** | Octa-core Kryo architecture (1x 2.7GHz + 3x 2.4GHz + 4x 1.8GHz) |
+| **GPU** | Qualcomm Adreno 810 GPU |
+| **Display** | 6.78-inch 1.5K OLED, 144Hz, Quad-Curved |
 | **Battery** | 7,000 mAh Silicon-Carbon, 68W TurboPower |
-| **Cameras** | 50 MP (Sony Lytia 710, OIS) + 13 MP (Ultra-Wide/Macro) + 32 MP Front |
 | **Storage / RAM** | 8GB/12GB LPDDR5X + 128GB/256GB/512GB UFS |
-| **Biometrics** | Optical In-Display Fingerprint Sensor |
-| **Android Version** | Android 16 (GKI 6.6, Header v4) |
+| **Android Version** | Android 15 / 16 (GKI 6.6, Header v4) |
+| **Partition Scheme** | Dynamic Partitions (`super`), Virtual A/B OTA |
 
 ---
 
-## 📂 Repository Structure
+## 🛠️ How to Build OrangeFox Recovery
 
-```
-device/motorola/marvel/
-├── Android.bp                       # Blueprint targets & namespaces
-├── Android.mk                       # Legacy makefile hook
-├── AndroidProducts.mk               # Target definitions (lineage_marvel / orangefox_marvel)
-├── BoardConfig.mk                   # Dynamic partition limits, GKI 6.6, AVB, sepolicy
-├── device.mk                        # Hardware permissions, copy files, system props
-├── lineage_marvel.mk               # LineageOS product configuration
-├── extract-files.sh                 # Vendor blob extraction script
-├── proprietary-files.txt            # Manifest of proprietary binaries
-├── prebuilt/                        # Authentic Qualcomm SM7750 DTB & DTBO
-├── configs/                         # Audio, GPS, Wi-Fi, Keylayout configs
-├── rootdir/                         # fstab.qcom (FBE v2) and device init scripts
-├── rro_overlays/                    # Runtime resource overlays (144Hz, 1.5K display)
-└── sepolicy/                        # SELinux vendor context rules & HAL permissions
-```
-
----
-
-## 🚀 How to Build Custom ROM (Android 16)
-
-### 1. Extract Vendor Blobs
+### 1. Initialize the Minimal OrangeFox Manifest
 ```bash
-./extract-files.sh /path/to/extracted/firmware
+repo init --depth=1 -u https://gitlab.com/OrangeFox/manifest.git -b fox_12.1
+repo sync -c -j$(nproc --all) --force-sync --no-clone-bundle --no-tags
 ```
 
-### 2. Build the ROM
+### 2. Clone Device & Vendor Trees
+```bash
+git clone https://github.com/shripad-jyothinath/android_device_motorola_marvel.git -b ofox device/motorola/marvel
+git clone https://github.com/shripad-jyothinath/android_vendor_motorola_marvel.git -b ofox vendor/motorola/marvel
+```
+
+### 3. Compile
 ```bash
 source build/envsetup.sh
-lunch lineage_marvel-userdebug
-m bacon -j$(nproc --all)
+lunch orangefox_marvel-eng
+m recoveryimage -j$(nproc --all)
+```
+
+---
+
+## ⚡ Flashing Guide
+
+```bash
+# Reboot to bootloader
+adb reboot bootloader
+
+# Flash recovery image
+fastboot flash recovery recovery_marvel.img
+
+# Reboot into OrangeFox
+fastboot reboot recovery
 ```
 
 ---
