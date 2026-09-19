@@ -22,7 +22,7 @@ PRODUCT_MODEL := motorola edge 70 fusion
 PRODUCT_MANUFACTURER := motorola
 PRODUCT_GMS_CLIENTID_BASE := android-motorola
 
-EVO_BUILD_TYPE := UNOFFICIAL
+EVO_BUILD_TYPE := Unofficial
 EVO_MAINTAINER := Shripad
 
 # Evolution X Features & Customizations
