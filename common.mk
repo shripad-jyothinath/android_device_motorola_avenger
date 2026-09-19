@@ -259,8 +259,6 @@ PRODUCT_PACKAGES += \
     SystemUIResCommon \
     TelephonyResCommon \
     WifiResCommon \
-    FrameworksResSun \
-    WifiResSun \
     SecureElementResTarget_Vendor \
     NcmTetheringOverlay
 
