@@ -254,11 +254,6 @@ PRODUCT_PACKAGES += \
 
 # Overlays
 PRODUCT_PACKAGES += \
-    FrameworksResCommon \
-    LineageSdkCommon \
-    SystemUIResCommon \
-    TelephonyResCommon \
-    WifiResCommon \
     SecureElementResTarget_Vendor \
     NcmTetheringOverlay
 
@@ -437,7 +432,7 @@ PRODUCT_COPY_FILES += \
 
 # VINTF
 DEVICE_FRAMEWORK_COMPATIBILITY_MATRIX_FILE := \
-    $(LOCAL_PATH)/vintf/vendor_framework_compatibility_matrix.xml \
+    $(LOCAL_PATH)/vintf/vintf/vendor_framework_compatibility_matrix.xml \
     hardware/motorola/vintf/device_framework_matrix.xml \
     hardware/qcom-caf/common/vendor_framework_compatibility_matrix.xml
 DEVICE_MANIFEST_FILE := \
