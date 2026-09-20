@@ -132,8 +132,7 @@ BOARD_VENDOR_RAMDISK_KERNEL_MODULES += \
     $(DEVICE_PATH)/modules/vendor_dlkm/touchscreen_mmi.ko \
     $(DEVICE_PATH)/modules/vendor_dlkm/mmi_annotate.ko \
     $(DEVICE_PATH)/modules/vendor_dlkm/mmi_info.ko \
-    $(DEVICE_PATH)/modules/vendor_dlkm/goodix_brl_mmi.ko \
-    $(DEVICE_PATH)/modules/vendor_dlkm/focaltech_v3_4.ko
+    $(DEVICE_PATH)/modules/vendor_dlkm/goodix_brl_mmi.ko
 BOARD_VENDOR_RAMDISK_KERNEL_MODULES_LOAD := $(strip $(shell cat $(DEVICE_PATH)/modules.load.vendor_boot 2>/dev/null))
 BOARD_VENDOR_RAMDISK_KERNEL_MODULES_BLOCKLIST_FILE := $(BOARD_VENDOR_KERNEL_MODULES_BLOCKLIST_FILE)
 BOARD_VENDOR_RAMDISK_RECOVERY_KERNEL_MODULES_LOAD := $(strip $(shell cat $(DEVICE_PATH)/modules.load.recovery 2>/dev/null))
