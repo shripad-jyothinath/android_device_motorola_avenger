@@ -3,6 +3,8 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
+TARGET_DISABLE_EPPE := true
+
 # Inherit from those products. Most specific first.
 $(call inherit-product, $(SRC_TARGET_DIR)/product/core_64_bit.mk)
 $(call inherit-product, $(SRC_TARGET_DIR)/product/full_base_telephony.mk)
@@ -23,6 +25,5 @@ PRODUCT_GMS_CLIENTID_BASE := android-motorola
 
 # Build fingerprint and description
 PRODUCT_BUILD_PROP_OVERRIDES += \
-    PRODUCT_NAME=marvel_g \
     TARGET_DEVICE=marvel \
     TARGET_PRODUCT=marvel
