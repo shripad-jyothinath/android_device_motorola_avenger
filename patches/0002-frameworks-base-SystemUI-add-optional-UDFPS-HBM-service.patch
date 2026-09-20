@@ -1,0 +1,179 @@
+From cc301e045b6d9ce5e112584e829d497cf89290c2 Mon Sep 17 00:00:00 2001
+From: Shripad <71135716+shripad-jyothinath@users.noreply.github.com>
+Date: Sun, 20 Sep 2026 20:29:13 +0000
+Subject: [PATCH] SystemUI: add optional UDFPS HBM service
+
+---
+ packages/SystemUI/Android.bp                  |  2 +
+ packages/SystemUI/res/values/config.xml       |  3 +
+ .../systemui/biometrics/AuthController.java   |  2 +-
+ .../systemui/biometrics/UdfpsDisplayMode.kt   | 65 +++++++++++++++++--
+ 4 files changed, 66 insertions(+), 6 deletions(-)
+
+diff --git a/packages/SystemUI/Android.bp b/packages/SystemUI/Android.bp
+index e2c23f77d..486fdaecc 100644
+--- a/packages/SystemUI/Android.bp
++++ b/packages/SystemUI/Android.bp
+@@ -583,6 +583,7 @@ android_library {
+         "uilatencystats_flags_core_java_lib",
+         "personalcontext_ace_visualizer",
+         "vendor.lineage.powershare-V1-java",
++        "vendor.lineage.biometrics.udfps-V1-java",
+         "FadingEdgeLayoutLib",
+     ],
+     enable_ksp: true,
+@@ -795,6 +796,7 @@ android_library {
+         "dynamiccolors",
+         "SurfaceEffectsComposeLib",
+         "vendor.lineage.powershare-V1-java",
++        "vendor.lineage.biometrics.udfps-V1-java",
+     ],
+ }
+ 
+diff --git a/packages/SystemUI/res/values/config.xml b/packages/SystemUI/res/values/config.xml
+index 49d16ca8b..0148f484e 100644
+--- a/packages/SystemUI/res/values/config.xml
++++ b/packages/SystemUI/res/values/config.xml
+@@ -714,6 +714,9 @@
+          when the device supports an under-display fingerprint sensor -->
+     <integer name="config_udfpsDeviceEntryIconLongPress" translatable="false">100</integer>
+ 
++    <!-- Optional stable Binder service that controls optical UDFPS local HBM. -->
++    <string name="config_udfpsHbmService" translatable="false"></string>
++
+     <!-- package name of a built-in camera app to use to restrict implicit intent resolution
+          when the double-press power gesture is used. Ignored if empty. -->
+     <string translatable="false" name="config_cameraGesturePackage"></string>
+diff --git a/packages/SystemUI/src/com/android/systemui/biometrics/AuthController.java b/packages/SystemUI/src/com/android/systemui/biometrics/AuthController.java
+index fc44c2644..4945ce8ed 100644
+--- a/packages/SystemUI/src/com/android/systemui/biometrics/AuthController.java
++++ b/packages/SystemUI/src/com/android/systemui/biometrics/AuthController.java
+@@ -349,7 +349,7 @@ public class AuthController implements
+             });
+             mUdfpsController.setAuthControllerUpdateUdfpsLocation(this::updateUdfpsLocation);
+             mUdfpsController.setUdfpsDisplayMode(new UdfpsDisplayMode(mContext, mExecution,
+-                    this, mUdfpsLogger.get()));
++                    this, mUdfpsLogger.get(), mBackgroundExecutor));
+             mUdfpsBounds = mUdfpsProps.get(0).getLocation().getRect();
+         }
+         mSidefpsProps = !sidefpsProps.isEmpty() ? sidefpsProps : null;
+diff --git a/packages/SystemUI/src/com/android/systemui/biometrics/UdfpsDisplayMode.kt b/packages/SystemUI/src/com/android/systemui/biometrics/UdfpsDisplayMode.kt
+index 0afc1c94f..5522e1648 100644
+--- a/packages/SystemUI/src/com/android/systemui/biometrics/UdfpsDisplayMode.kt
++++ b/packages/SystemUI/src/com/android/systemui/biometrics/UdfpsDisplayMode.kt
+@@ -18,8 +18,12 @@ package com.android.systemui.biometrics
+ 
+ import android.content.Context
+ import android.os.RemoteException
++import android.os.ServiceManager
+ import android.os.Trace
++import com.android.systemui.res.R
+ import com.android.systemui.util.concurrency.Execution
++import java.util.concurrent.Executor
++import vendor.lineage.biometrics.udfps.IUdfpsHbm
+ 
+ private const val TAG = "UdfpsDisplayMode"
+ 
+@@ -32,11 +36,14 @@ constructor(
+     private val context: Context,
+     private val execution: Execution,
+     private val authController: AuthController,
+-    private val logger: UdfpsLogger
++    private val logger: UdfpsLogger,
++    private val backgroundExecutor: Executor
+ ) : UdfpsDisplayModeProvider {
+ 
+     // The request is reset to null after it's processed.
+     private var currentRequest: Request? = null
++    private var requestGeneration = 0L
++    private val hbmServiceName = context.getString(R.string.config_udfpsHbmService)
+ 
+     override fun getCurrentToken(): Any? = currentRequest
+ 
+@@ -52,7 +59,7 @@ constructor(
+         Trace.beginSection("UdfpsDisplayMode.enable")
+ 
+         // Track this request in one object.
+-        val request = Request(context.displayId)
++        val request = Request(context.displayId, ++requestGeneration)
+         currentRequest = request
+ 
+         try {
+@@ -64,7 +71,27 @@ constructor(
+             logger.e(TAG, "enable", e)
+         }
+ 
+-        onEnabled?.run() ?: logger.w(TAG, "enable | onEnabled is null")
++        if (hbmServiceName.isEmpty()) {
++            onEnabled?.run() ?: logger.w(TAG, "enable | onEnabled is null")
++        } else {
++            backgroundExecutor.execute {
++                val enabled = setHbmEnabled(true)
++                context.mainExecutor.execute main@{
++                    if (currentRequest?.generation != request.generation) {
++                        if (enabled) {
++                            backgroundExecutor.execute { setHbmEnabled(false) }
++                        }
++                        return@main
++                    }
++                    if (enabled) {
++                        logger.v(TAG, "enable | local HBM enabled")
++                        onEnabled?.run() ?: logger.w(TAG, "enable | onEnabled is null")
++                    } else {
++                        logger.e(TAG, "enable | failed to enable local HBM")
++                    }
++                }
++            }
++        }
+         Trace.endSection()
+     }
+ 
+@@ -89,10 +116,38 @@ constructor(
+         }
+ 
+         currentRequest = null
+-        onDisabled?.run() ?: logger.w(TAG, "disable | onDisabled is null")
++        requestGeneration++
++        if (hbmServiceName.isEmpty()) {
++            onDisabled?.run() ?: logger.w(TAG, "disable | onDisabled is null")
++        } else {
++            backgroundExecutor.execute {
++                setHbmEnabled(false)
++                context.mainExecutor.execute {
++                    onDisabled?.run() ?: logger.w(TAG, "disable | onDisabled is null")
++                }
++            }
++        }
+         Trace.endSection()
+     }
+ 
++    private fun setHbmEnabled(enabled: Boolean): Boolean {
++        return try {
++            val binder = ServiceManager.getService(hbmServiceName)
++            if (binder == null) {
++                logger.e(TAG, "setHbmEnabled | service unavailable: $hbmServiceName")
++                false
++            } else {
++                IUdfpsHbm.Stub.asInterface(binder).setEnabled(enabled)
++            }
++        } catch (e: RemoteException) {
++            logger.e(TAG, "setHbmEnabled | remote failure", e)
++            false
++        } catch (e: RuntimeException) {
++            logger.e(TAG, "setHbmEnabled | service failure", e)
++            false
++        }
++    }
++
+     override fun disableIfCurrent(expectedToken: Any?, onDisabled: Runnable?): Boolean {
+         execution.isMainThread()
+         if (currentRequest !== expectedToken) {
+@@ -140,4 +195,4 @@ constructor(
+ }
+ 
+ /** Tracks a request to enable the UDFPS mode. */
+-private data class Request(val displayId: Int)
++private data class Request(val displayId: Int, val generation: Long)
+-- 
+2.43.0
+
