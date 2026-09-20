@@ -82,7 +82,7 @@ TARGET_FS_CONFIG_GEN := $(DEVICE_PATH)/config.fs
 # GPS
 BOARD_VENDOR_QCOM_GPS_LOC_API_HARDWARE := default
 
-# Kernel (SM7750 / GKI 6.1)
+# Kernel (Prebuilt GKI 6.1)
 BOARD_BOOT_HEADER_VERSION := 4
 BOARD_KERNEL_BASE := 0x00000000
 BOARD_KERNEL_PAGESIZE := 4096
@@ -90,9 +90,13 @@ BOARD_MKBOOTIMG_ARGS += --header_version $(BOARD_BOOT_HEADER_VERSION)
 BOARD_RAMDISK_USE_LZ4 := true
 BOARD_USES_GENERIC_KERNEL_IMAGE := true
 TARGET_KERNEL_VERSION := 6.1
-TARGET_KERNEL_SOURCE := kernel/motorola/sm7750
-TARGET_KERNEL_CONFIG := gki_defconfig vendor/ext_config/moto-pineapple-marvel.config
-BOARD_KERNEL_IMAGE_NAME := Image
+TARGET_PREBUILT_KERNEL := $(DEVICE_PATH)/prebuilt/kernel
+TARGET_PREBUILT_KERNEL_HEADERS := $(DEVICE_PATH)/prebuilt/kernel-headers.tar.gz
+BOARD_PREBUILT_DTBIMAGE_DIR := $(DEVICE_PATH)/prebuilt/dtb
+BOARD_PREBUILT_DTBOIMAGE := $(DEVICE_PATH)/prebuilt/dtbo.img
+# TARGET_KERNEL_SOURCE := kernel/motorola/sm7750
+# TARGET_KERNEL_CONFIG := gki_defconfig vendor/ext_config/moto-pineapple-marvel.config
+# BOARD_KERNEL_IMAGE_NAME := Image
 
 BOARD_KERNEL_CMDLINE += \
     video=vfb:640x400,bpp=32,memsize=3072000 \
@@ -116,6 +120,7 @@ BOARD_BOOTCONFIG += \
     androidboot.serialconsole=0
 
 # Kernel Modules
+BOARD_VENDOR_KERNEL_MODULES := $(wildcard $(DEVICE_PATH)/modules/vendor_dlkm/*.ko)
 BOARD_SYSTEM_KERNEL_MODULES_LOAD := $(strip $(shell cat $(DEVICE_PATH)/modules.load.system_dlkm 2>/dev/null))
 BOARD_VENDOR_KERNEL_MODULES_LOAD := $(strip $(shell cat $(DEVICE_PATH)/modules.load 2>/dev/null))
 BOARD_SYSTEM_KERNEL_MODULES_BLOCKLIST_FILE := $(DEVICE_PATH)/modules.systemdlkm_blocklist
