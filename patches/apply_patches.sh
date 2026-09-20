@@ -28,4 +28,24 @@ if [ -d "${TOP}/frameworks/base" ]; then
     fi
 fi
 
+# 3. bionic
+if [ -d "${TOP}/bionic" ]; then
+    if git -C "${TOP}/bionic" apply --check "${DIR}/0003-bionic-include-system-properties.patch" 2>/dev/null; then
+        git -C "${TOP}/bionic" apply "${DIR}/0003-bionic-include-system-properties.patch"
+        echo "  ✓ Applied bionic system properties patch"
+    else
+        echo "  - bionic patch already applied"
+    fi
+fi
+
+# 4. vendor/lineage
+if [ -d "${TOP}/vendor/lineage" ]; then
+    if git -C "${TOP}/vendor/lineage" apply --check "${DIR}/0004-vendor-lineage-soong-extract-prebuilt-headers.patch" 2>/dev/null; then
+        git -C "${TOP}/vendor/lineage" apply "${DIR}/0004-vendor-lineage-soong-extract-prebuilt-headers.patch"
+        echo "  ✓ Applied vendor/lineage soong prebuilt headers patch"
+    else
+        echo "  - vendor/lineage patch already applied"
+    fi
+fi
+
 echo "==> Done!"

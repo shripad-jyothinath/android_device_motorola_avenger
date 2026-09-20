@@ -1,0 +1,28 @@
+From 830da14d59d4274bda421a8e1641747b390cb411 Mon Sep 17 00:00:00 2001
+From: Shripad <71135716+shripad-jyothinath@users.noreply.github.com>
+Date: Sun, 20 Sep 2026 20:51:59 +0000
+Subject: [PATCH] soong: Extract TARGET_PREBUILT_KERNEL_HEADERS in
+ generated_kernel_includes
+
+---
+ build/soong/Android.bp | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/build/soong/Android.bp b/build/soong/Android.bp
+index 37cace0..bc2e21c 100644
+--- a/build/soong/Android.bp
++++ b/build/soong/Android.bp
+@@ -24,7 +24,9 @@ lineage_generator {
+     // The headers make command
+     cmd: "set -e; " +
+          "(cd $(KERNEL_BUILD_OUT_PREFIX).; " +
+-         "if [ -n \"$(TARGET_KERNEL_PLATFORM_TARGET)\" ]; then " +
++         "if [ -n \"$(TARGET_PREBUILT_KERNEL_HEADERS)\" ]; then " +
++         "    mkdir -p $(genDir) && gzip -d < $(TARGET_PREBUILT_KERNEL_HEADERS) | tar -x -C $(genDir); " +
++         "elif [ -n \"$(TARGET_KERNEL_PLATFORM_TARGET)\" ]; then " +
+          "    pushd $(KERNEL_PATH); " +
+          "    ./tools/bazel --output_user_root=$(KERNEL_BUILD_OUT_PREFIX)$(genDir)/bazel-out --output_root=$(KERNEL_BUILD_OUT_PREFIX)$(genDir)/bazel-out run --experimental_convenience_symlinks=ignore --cpu=$(KERNEL_ARCH) //$(TARGET_KERNEL_SOURCE):$(TARGET_KERNEL_PLATFORM_TARGET)_uapi_headers_dist -- --destdir=$(KERNEL_BUILD_OUT_PREFIX)$(genDir); " +
+          "    popd; " +
+-- 
+2.43.0
+

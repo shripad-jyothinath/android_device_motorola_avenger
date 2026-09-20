@@ -1,0 +1,43 @@
+From cf75ea6941e6c9794a3ea7c698536a407b731962 Mon Sep 17 00:00:00 2001
+From: Shripad <71135716+shripad-jyothinath@users.noreply.github.com>
+Date: Sun, 20 Sep 2026 20:51:59 +0000
+Subject: [PATCH] bionic: Include <sys/system_properties.h> for PROP_VALUE_MAX
+ in custom_rom_hide
+
+---
+ libc/bionic/custom_rom_hide.cpp | 1 +
+ libc/include/sched.h            | 3 +++
+ 2 files changed, 4 insertions(+)
+
+diff --git a/libc/bionic/custom_rom_hide.cpp b/libc/bionic/custom_rom_hide.cpp
+index d07ac18..3d174ba 100644
+--- a/libc/bionic/custom_rom_hide.cpp
++++ b/libc/bionic/custom_rom_hide.cpp
+@@ -32,6 +32,7 @@
+ #include <sys/sysmacros.h>
+ #include <unistd.h>
+ #include <private/android_filesystem_config.h>
++#include <sys/system_properties.h>
+ 
+ #define HIDE_MEMFD_TAG "mf"
+ #define HIDE_MEMFD_NAME_PREFIX HIDE_MEMFD_TAG ":"
+diff --git a/libc/include/sched.h b/libc/include/sched.h
+index 8f2b1ac..595f9bd 100644
+--- a/libc/include/sched.h
++++ b/libc/include/sched.h
+@@ -97,9 +97,12 @@ __BEGIN_DECLS
+  * See sched_getparam()/sched_setparam() and
+  * sched_getscheduler()/sched_setscheduler().
+  */
++#ifndef __defined_schedparam
++#define __defined_schedparam
+ struct sched_param {
+   int sched_priority;
+ };
++#endif
+ 
+ /**
+  * [sched_setscheduler(2)](https://man7.org/linux/man-pages/man2/sched_setscheduler.2.html)
+-- 
+2.43.0
+
