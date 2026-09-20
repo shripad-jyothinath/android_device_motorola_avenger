@@ -3,6 +3,5 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
-# Data & Sysfs types
+# Data types
 type vendor_fingerprint_data_file, file_type, data_file_type;
-type sysfs_touchpanel, sysfs_type, fs_type;
