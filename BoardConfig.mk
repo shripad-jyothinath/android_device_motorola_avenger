@@ -185,7 +185,8 @@ TARGET_SYSTEM_EXT_PROP += $(DEVICE_PATH)/system_ext.prop
 TARGET_VENDOR_PROP += $(DEVICE_PATH)/vendor.prop
 
 # Recovery
-BOARD_EXCLUDE_KERNEL_FROM_RECOVERY_IMAGE := true
+# Marvel has a dedicated recovery partition.  Keep the matching prebuilt
+# kernel in recovery.img so the bootloader can execute the recovery ramdisk.
 TARGET_RECOVERY_PIXEL_FORMAT := RGBX_8888
 TARGET_USERIMAGES_USE_EXT4 := true
 TARGET_USERIMAGES_USE_F2FS := true
