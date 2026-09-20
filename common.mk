@@ -431,6 +431,11 @@ PRODUCT_COPY_FILES += \
     vendor/qcom/opensource/vibrator/excluded-input-devices.xml:$(TARGET_COPY_OUT_VENDOR)/etc/excluded-input-devices.xml
 
 # VINTF
+# Device launched on Android 14 (API 34, FCM level 8).
+# This tells checkvintf to enforce FCM ≤ level 8 only, which:
+#   - Allows mapper@4.0 HIDL (deprecated only in FCM 202404)
+#   - Allows composer3 AIDL @2 (deprecation only triggers for FCM 202404+ targets)
+PRODUCT_SHIPPING_API_LEVEL := 34
 DEVICE_FRAMEWORK_COMPATIBILITY_MATRIX_FILE := \
     $(LOCAL_PATH)/vintf/vintf/vendor_framework_compatibility_matrix.xml \
     hardware/motorola/vintf/device_framework_matrix.xml \
@@ -438,6 +443,7 @@ DEVICE_FRAMEWORK_COMPATIBILITY_MATRIX_FILE := \
 DEVICE_MANIFEST_FILE := \
     $(LOCAL_PATH)/vintf/vintf/manifest.xml
 DEVICE_MATRIX_FILE := hardware/qcom-caf/common/compatibility_matrix.xml
+
 
 # WiFi
 PRODUCT_PACKAGES += \
