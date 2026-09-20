@@ -5,3 +5,4 @@
 
 /vendor/bin/hw/android\.hardware\.biometrics\.face-service\.face-isv u:object_r:hal_camera_default_exec:s0
 /data/vendor/tetras_data(/.*)?         u:object_r:vendor_data_file:s0
+/vendor/bin/init\.mmi\.touch\.sh       u:object_r:vendor_touch_init_exec:s0
