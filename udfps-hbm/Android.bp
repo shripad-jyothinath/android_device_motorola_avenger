@@ -1,0 +1,17 @@
+cc_binary {
+    name: "marvel-udfps-hbm",
+    vendor: true,
+    srcs: ["UdfpsHbm.cpp"],
+    init_rc: ["marvel-udfps-hbm.rc"],
+    vintf_fragments: ["marvel-udfps-hbm.xml"],
+    shared_libs: [
+        "libbinder_ndk",
+        "liblog",
+        "libutils",
+        "vendor.lineage.biometrics.udfps-V1-ndk",
+    ],
+    cflags: [
+        "-Wall",
+        "-Werror",
+    ],
+}

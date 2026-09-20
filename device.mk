@@ -31,6 +31,7 @@ PRODUCT_COPY_FILES += \
 PRODUCT_PACKAGES += \
     moto-framework \
     moto-res \
+    marvel-udfps-hbm \
     RefreshRateDefaults \
     MarvelFrameworksOverlay \
     MarvelSystemUIOverlay

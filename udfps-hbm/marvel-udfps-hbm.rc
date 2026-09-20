@@ -1,0 +1,4 @@
+service vendor.marvel-udfps-hbm /vendor/bin/marvel-udfps-hbm
+    class late_start
+    user system
+    seclabel u:r:hal_fingerprint_default:s0
