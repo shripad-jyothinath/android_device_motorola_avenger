@@ -24,6 +24,3 @@ PRODUCT_MANUFACTURER := motorola
 PRODUCT_GMS_CLIENTID_BASE := android-motorola
 
 # Build fingerprint and description
-PRODUCT_BUILD_PROP_OVERRIDES += \
-    TARGET_DEVICE=marvel \
-    TARGET_PRODUCT=marvel
