@@ -36,27 +36,18 @@ PRODUCT_PACKAGES += \
     MarvelSystemUIOverlay
 
 # Permissions & Hardware Features
-PRODUCT_COPY_FILES += \
-    frameworks/native/data/etc/android.hardware.camera.flash-autofocus.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.camera.flash-autofocus.xml \
-    frameworks/native/data/etc/android.hardware.camera.front.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.camera.front.xml \
-    frameworks/native/data/etc/android.hardware.camera.full.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.camera.full.xml \
-    frameworks/native/data/etc/android.hardware.camera.raw.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.camera.raw.xml \
-    frameworks/native/data/etc/android.hardware.fingerprint.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.fingerprint.xml \
-    frameworks/native/data/etc/android.hardware.touchscreen.multitouch.jazzhand.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.touchscreen.multitouch.jazzhand.xml
+# Note: camera/fingerprint/touch permissions are inherited from common.mk
 
 # Keylayout (Power, Volume Buttons, Assistant)
 PRODUCT_COPY_FILES += \
     $(DEVICE_PATH)/configs/keylayout/gpio-keys.kl:$(TARGET_COPY_OUT_SYSTEM)/usr/keylayout/gpio-keys.kl
 
 # SurfaceFlinger Display & Touch Boost Properties
+# Note: ro.surface_flinger.* props are defined in vendor.prop; only build-time overrides here
 PRODUCT_VENDOR_PROPERTIES += \
     ro.surface_flinger.touch_boost_across_groups=true \
     ro.surface_flinger.touch_boost_refresh_rate=90 \
-    ro.surface_flinger.has_HDR_display=true \
-    ro.surface_flinger.has_wide_color_display=true \
-    ro.surface_flinger.use_color_management=true \
-    ro.surface_flinger.set_idle_timer_ms=1100 \
-    ro.surface_flinger.set_touch_timer_ms=1000
+    ro.surface_flinger.set_idle_timer_ms=1100
 
 # Motorola Camera Extensions & Multi-Lens Whitelist
 PRODUCT_PRODUCT_PROPERTIES += \

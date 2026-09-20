@@ -359,10 +359,8 @@ PRODUCT_PACKAGES += \
     libcodec2_hidl_1_2_vendor \
     libqti-perfd-client_vendor
 
-# RoadSTR uses AOSP tinyxml2 globally; keep Motorola copy private to poweropt.
-ifeq ($(ROADSTR_HAS_NO_FM_TUNER),)
+# Marvel has no FM tuner; keep Motorola tinyxml2 copy private to poweropt.
 PRODUCT_PACKAGES += libtinyxml2_vendor
-endif
 
 # Use stock blobs to overwrite AOSP/QCOM vendor variants
 
@@ -479,5 +477,4 @@ PRODUCT_VENDOR_PROPERTIES += \
     dalvik.vm.heapminfree=8m \
     dalvik.vm.heapmaxfree=32m
 
-# Inherit from vendor blobs
-$(call inherit-product-if-exists, vendor/motorola/marvel/marvel-vendor.mk)
+# Note: vendor blobs are inherited via device.mk → vendor/motorola/marvel/marvel-vendor.mk

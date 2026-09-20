@@ -38,14 +38,14 @@ if [ ! -f "build/envsetup.sh" ]; then
 fi
 source build/envsetup.sh
 
-# 4. Lunch Target
-echo "[4/5] Selecting lunch target: evolution_${DEVICE}-userdebug..."
-lunch "evolution_${DEVICE}-userdebug"
+# 4. Breakfast (device selection + env setup)
+echo "[4/5] Running breakfast for ${DEVICE}..."
+breakfast "${DEVICE}"
 
 # 5. Compilation
 START_TIME=$(date +%s)
-echo "[5/5] Launching Evolution X compilation on $(nproc --all) threads..."
-m evolution -j$(nproc --all) 2>&1 | tee "build_${DEVICE}.log"
+echo "[5/5] Launching Evolution X via brunch..."
+brunch "${DEVICE}" 2>&1 | tee "build_${DEVICE}.log"
 
 END_TIME=$(date +%s)
 DURATION=$((END_TIME - START_TIME))

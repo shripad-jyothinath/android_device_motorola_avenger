@@ -109,11 +109,7 @@ BOARD_BOOTCONFIG += \
     androidboot.vendor.qspa=true \
     androidboot.adb_early=1 \
     androidboot.init_fatal_panic=true \
-    androidboot.roadstr_init_probe=trace_actions \
-    androidboot.selinux=permissive \
     androidboot.serialconsole=0
-
-BOARD_KERNEL_IMAGE_NAME := Image
 
 # Kernel Modules
 BOARD_SYSTEM_KERNEL_MODULES_LOAD := $(strip $(shell cat $(DEVICE_PATH)/modules.load.system_dlkm 2>/dev/null))
@@ -183,7 +179,7 @@ ENABLE_VENDOR_RIL_SERVICE := true
 # SELinux
 -include device/qcom/sepolicy_vndr/SEPolicy.mk
 -include device/evolution/sepolicy/libperfmgr/sepolicy.mk
--include device/lineage/sepolicy/libperfmgr/sepolicy.mk
+# Note: device/lineage/sepolicy is redundant when building Evolution X
 -include hardware/motorola/sepolicy/qti/SEPolicy.mk
 BOARD_VENDOR_SEPOLICY_DIRS += $(DEVICE_PATH)/sepolicy/vendor
 

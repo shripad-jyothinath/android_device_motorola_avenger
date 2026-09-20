@@ -5,7 +5,7 @@
     "branch": "android-16"
   },
   {
-    "repository": "android_vendor_motorola_avenger",
+    "repository": "android_vendor_motorola_marvel",
     "target_path": "vendor/motorola/marvel",
     "branch": "android-16"
   },
