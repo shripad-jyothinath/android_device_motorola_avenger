@@ -1,6 +1,5 @@
-# this is auto generated modules.vendor_blocklist.msm.moto
 # SPDX-License-Identifier: GPL-2.0-only
-# Copyright (c) 2023-2024 Qualcomm Innovation Center, Inc. All rights reserved.
+# Copyright (c) 2022-2023 Qualcomm Innovation Center, Inc. All rights reserved.
 blocklist 8250_of
 blocklist adc-tm
 blocklist atomic64_test
@@ -59,14 +58,8 @@ blocklist vmw_vsock_virtio_transport
 blocklist vmw_vsock_virtio_transport_common
 blocklist vsock
 blocklist vsock_diag
+blocklist rbs_fod_mmi
+blocklist goodix_fod_mmi
+blocklist goodix_brl_mmi
 blocklist xc4000
 blocklist xc5000
-# moto vendor_blocklist
-#moto vendor_blocklist
-#blocklist 8250_of
-blocklist anc_fps_mmi
-blocklist goodix_fod_mmi
-blocklist qm35_spi
-blocklist watchdogtest
-blocklist moto_pm_vh
-blocklist aw_haptic_hv_v1_5
