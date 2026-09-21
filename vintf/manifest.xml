@@ -50,10 +50,10 @@
         </interface>
     </hal>
 
-    <!-- Graphics Composer (HWC) -->
+    <!-- Graphics Composer3 (HWC AIDL) - vendor blob serves version 2 -->
     <hal format="aidl">
-        <name>android.hardware.graphics.composer</name>
-        <version>1</version>
+        <name>android.hardware.graphics.composer3</name>
+        <version>2</version>
         <interface>
             <name>IComposer</name>
             <instance>default</instance>

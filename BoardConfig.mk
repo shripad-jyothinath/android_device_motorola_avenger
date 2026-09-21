@@ -191,6 +191,38 @@ TARGET_RECOVERY_PIXEL_FORMAT := RGBX_8888
 TARGET_USERIMAGES_USE_EXT4 := true
 TARGET_USERIMAGES_USE_F2FS := true
 TARGET_RECOVERY_FSTAB := $(DEVICE_PATH)/rootdir/etc/fstab.qcom
+TARGET_RECOVERY_DEVICE_DIRS += $(DEVICE_PATH)/recovery
+
+# TWRP / Custom Recovery Flags
+TW_THEME := portrait_hdpi
+TARGET_SCREEN_WIDTH := 1220
+TARGET_SCREEN_HEIGHT := 2712
+TARGET_SCREEN_DENSITY := 440
+TW_FRAMERATE := 144
+TW_NO_SCREEN_TIMEOUT := true
+TW_EXCLUDE_DEFAULT_USB_INIT := true
+TW_INCLUDE_FASTBOOTD := true
+TW_USE_MODEL_HARDWARE_ID_FOR_DEVICE_ID := true
+TW_BRIGHTNESS_PATH := "/sys/class/backlight/panel0-backlight/brightness"
+TW_MAX_BRIGHTNESS := 2047
+TW_DEFAULT_BRIGHTNESS := 1024
+TW_NO_HAPTICS := true
+TW_INCLUDE_CRYPTO := true
+TW_INCLUDE_CRYPTO_FBE := true
+TW_INCLUDE_FBE_METADATA_DECRYPT := true
+TW_USE_FSCRYPT_POLICY := 2
+
+# Recovery Touchscreen & Input Modules
+BOARD_VENDOR_RAMDISK_RECOVERY_KERNEL_MODULES_LOAD += \
+    mmi_info.ko \
+    mmi_relay.ko \
+    mmi_annotate.ko \
+    mmi_stow.ko \
+    sensors_class.ko \
+    touchscreen_mmi.ko \
+    goodix_brl_mmi.ko \
+    goodix_fod_mmi.ko \
+    rbs_fod_mmi.ko
 
 # RIL
 ENABLE_VENDOR_RIL_SERVICE := true

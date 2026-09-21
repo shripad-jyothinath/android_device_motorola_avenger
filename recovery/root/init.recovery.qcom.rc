@@ -1,0 +1,25 @@
+#
+# Motorola Edge 70 Fusion (marvel / volcano) Recovery Init
+#
+
+on early-init
+    # Insert Motorola touch and sensor DLKM modules
+    insmod /vendor/lib/modules/mmi_info.ko
+    insmod /vendor/lib/modules/mmi_relay.ko
+    insmod /vendor/lib/modules/mmi_annotate.ko
+    insmod /vendor/lib/modules/sensors_class.ko
+    insmod /vendor/lib/modules/touchscreen_mmi.ko
+    insmod /vendor/lib/modules/goodix_brl_mmi.ko
+    insmod /vendor/lib/modules/goodix_fod_mmi.ko
+    insmod /vendor/lib/modules/rbs_fod_mmi.ko
+
+on init
+    setprop sys.usb.configfs 1
+
+on boot
+    # Execute recovery touch probe as fallback
+    exec u:r:recovery:s0 -- /system/bin/sh /system/bin/touch_probe.sh
+
+    # Brightness permissions for OLED panel
+    chmod 0660 /sys/class/backlight/panel0-backlight/brightness
+    chown system system /sys/class/backlight/panel0-backlight/brightness
